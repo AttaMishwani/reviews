@@ -26,20 +26,15 @@ export default function Sidebar({ activeTab, setActiveTab, shop }) {
         <div className="text-[10px] text-white/20 px-2.5 pb-1.5 pt-2 tracking-widest uppercase">
           Menu
         </div>
-        {navItems.map((item) => (
+
           <button
-            key={item.id}
-            onClick={() => setActiveTab(item.id)}
-            className={`flex items-center gap-2.5 w-full px-3 py-2.5 rounded-lg mb-0.5 text-[13px] text-left transition-all duration-150 cursor-pointer border-l-2 font-sans
-              ${activeTab === item.id
-                ? "bg-amber-500/10 text-amber-400 border-amber-400 font-semibold"
-                : "bg-transparent text-white/40 border-transparent font-normal hover:text-white/60 hover:bg-white/5"
-              }`}
+            className="w-full flex items-center gap-2 px-3 py-2 rounded-md hover:bg-white/5 text-white text-sm font-medium transition-colors"
           >
-            <span className="text-xs">{item.icon}</span>
-            {item.label}
+            <span className="text-base">✦</span>
+            <span>Reviews</span>
           </button>
-        ))}
+     
+    
       </nav>
 
       {/* Shop at bottom */}

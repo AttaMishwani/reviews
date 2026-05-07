@@ -1,0 +1,148 @@
+<div class="review-form-wrapper">
+  <h3 class="review-form-title">Write a Review</h3>
+
+  <div class="review-form-stars" id="starRating">
+    <span class="star" data-value="1">★</span>
+    <span class="star" data-value="2">★</span>
+    <span class="star" data-value="3">★</span>
+    <span class="star" data-value="4">★</span>
+    <span class="star" data-value="5">★</span>
+  </div>
+  <input type="hidden" id="ratingValue" value="0" />
+
+  <div class="review-form-field">
+    <label for="reviewAuthor">Your Name</label>
+    <input type="text" id="reviewAuthor" placeholder="John Doe" />
+  </div>
+
+  <div class="review-form-field">
+    <label for="reviewText">Your Review</label>
+    <textarea id="reviewText" rows="4" placeholder="Share your experience with this product..."></textarea>
+  </div>
+
+  <button id="submitReview" class="review-form-btn">
+    Submit Review
+  </button>
+
+  <p id="reviewMessage" class="review-form-message"></p>
+</div>
+
+<script>
+  window.__productId = "{{ product.id }}";
+  window.__appUrl = "{{ shop.metafields.app.url }}" || "https://70c1-202-47-55-94.ngrok-free.app";
+</script>
+
+{{ 'review-form.js' | asset_url | script_tag }}
+
+<style>
+  .review-form-wrapper {
+    max-width: 520px;
+    margin: 32px 0;
+    padding: 28px;
+    border: 1px solid #e5e7eb;
+    border-radius: 16px;
+    background: #fff;
+    font-family: inherit;
+  }
+
+  .review-form-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #111;
+    margin: 0 0 20px;
+  }
+
+  .review-form-stars {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 20px;
+    cursor: pointer;
+  }
+
+  .star {
+    font-size: 28px;
+    color: #d1d5db;
+    transition: color 0.15s;
+    cursor: pointer;
+  }
+
+  .star.active {
+    color: #f59e0b;
+  }
+
+  .review-form-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 16px;
+  }
+
+  .review-form-field label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #374151;
+  }
+
+  .review-form-field input,
+  .review-form-field textarea {
+    padding: 10px 14px;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    font-size: 14px;
+    font-family: inherit;
+    color: #111;
+    outline: none;
+    transition: border-color 0.15s;
+    resize: none;
+  }
+
+  .review-form-field input:focus,
+  .review-form-field textarea:focus {
+    border-color: #6366f1;
+  }
+
+  .review-form-btn {
+    width: 100%;
+    padding: 12px;
+    background: #111;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    transition: background 0.15s;
+  }
+
+  .review-form-btn:hover {
+    background: #374151;
+  }
+
+  .review-form-btn:disabled {
+    background: #9ca3af;
+    cursor: not-allowed;
+  }
+
+  .review-form-message {
+    margin-top: 12px;
+    font-size: 13px;
+    text-align: center;
+  }
+
+  .review-form-message.success {
+    color: #10b981;
+  }
+
+  .review-form-message.error {
+    color: #ef4444;
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Review Form",
+  "target": "section",
+  "settings": []
+}
+{% endschema %}
