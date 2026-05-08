@@ -5,7 +5,7 @@ const shopify = useAppBridge();
 
 
 const handleOpenDashboard = async () => {
-  console.log("🚀 handleOpenDashboard triggered");
+  console.log("handleOpenDashboard triggered");
 
   try {
     console.log("Requesting Shopify session token...");

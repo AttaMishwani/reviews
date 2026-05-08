@@ -5,6 +5,12 @@ import { createReadableStreamFromReadable } from "@react-router/node";
 import { isbot } from "isbot";
 import { addDocumentResponseHeaders } from "./shopify.server";
 
+export async function handleDataRequest(response, { request }) {
+  response.headers.set("Access-Control-Allow-Origin", "*");
+  response.headers.set("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+  response.headers.set("Access-Control-Allow-Headers", "Content-Type, ngrok-skip-browser-warning");
+  return response;
+}
 export const streamTimeout = 5000;
 
 export default async function handleRequest(

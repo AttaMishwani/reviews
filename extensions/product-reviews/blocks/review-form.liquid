@@ -1,141 +1,238 @@
-<div class="review-form-wrapper">
-  <h3 class="review-form-title">Write a Review</h3>
+<div class="rf-wrapper">
 
-  <div class="review-form-stars" id="starRating">
-    <span class="star" data-value="1">★</span>
-    <span class="star" data-value="2">★</span>
-    <span class="star" data-value="3">★</span>
-    <span class="star" data-value="4">★</span>
-    <span class="star" data-value="5">★</span>
-  </div>
-  <input type="hidden" id="ratingValue" value="0" />
-
-  <div class="review-form-field">
-    <label for="reviewAuthor">Your Name</label>
-    <input type="text" id="reviewAuthor" placeholder="John Doe" />
+  <!-- Header -->
+  <div class="rf-header">
+    <h3 class="rf-header-title">Leave a Review</h3>
   </div>
 
-  <div class="review-form-field">
-    <label for="reviewText">Your Review</label>
-    <textarea id="reviewText" rows="4" placeholder="Share your experience with this product..."></textarea>
+  <!-- Body: two columns -->
+  <div class="rf-body">
+
+    <!-- Left: Stars -->
+    <div class="rf-left">
+      <label class="rf-label">Your Rating <span class="rf-req">*</span></label>
+      <div class="rf-stars" id="starRating">
+        <span class="rf-star" data-value="1">★</span>
+        <span class="rf-star" data-value="2">★</span>
+        <span class="rf-star" data-value="3">★</span>
+        <span class="rf-star" data-value="4">★</span>
+        <span class="rf-star" data-value="5">★</span>
+      </div>
+      <p class="rf-hint">Click on a star to rate</p>
+      <input type="hidden" id="ratingValue" value="0" />
+    </div>
+
+    <!-- Right: Review + Name + Submit -->
+    <div class="rf-right">
+
+      <div class="rf-field">
+        <label class="rf-label" for="reviewText">Your Review <span class="rf-req">*</span></label>
+        <textarea id="reviewText" class="rf-textarea" rows="4" placeholder="Write your review here..." maxlength="500"></textarea>
+        <div class="rf-char-count"><span id="charCount">0</span>/500 characters</div>
+      </div>
+
+      <div class="rf-field">
+        <label class="rf-label" for="reviewAuthor">Your Name <span class="rf-req">*</span></label>
+        <input type="text" id="reviewAuthor" class="rf-input" placeholder="Your name" />
+      </div>
+
+      <div class="rf-footer">
+        <p id="reviewMessage" class="rf-message"></p>
+        <button id="submitReview" class="rf-btn">Submit Review</button>
+      </div>
+
+    </div>
+
   </div>
 
-  <button id="submitReview" class="review-form-btn">
-    Submit Review
-  </button>
-
-  <p id="reviewMessage" class="review-form-message"></p>
 </div>
 
 <script>
   window.__productId = "{{ product.id }}";
-  window.__appUrl = "{{ shop.metafields.app.url }}" || "https://70c1-202-47-55-94.ngrok-free.app";
+  window.__appUrl = "{{ shop.metafields.app.url }}" || "https://e791-202-47-41-0.ngrok-free.app";
+  window.__shop = "{{ shop.permanent_domain }}";
 </script>
 
-{{ 'review-form.js' | asset_url | script_tag }}
+<script src="{{ 'review-form.js' | asset_url }}" defer></script>
 
 <style>
-  .review-form-wrapper {
-    max-width: 520px;
+  .rf-wrapper {
+    max-width: 100%;
+    width: 100%;
     margin: 32px 0;
-    padding: 28px;
+    background: #f9fafb;
     border: 1px solid #e5e7eb;
     border-radius: 16px;
-    background: #fff;
+    overflow: hidden;
     font-family: inherit;
   }
 
-  .review-form-title {
+  /* Header */
+  .rf-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 18px 28px;
+    border-bottom: 1px solid #e5e7eb;
+    background: #f9fafb;
+  }
+
+  .rf-header-icon {
+    font-size: 20px;
+  }
+
+  .rf-header-title {
     font-size: 18px;
     font-weight: 700;
     color: #111;
-    margin: 0 0 20px;
+    margin: 0;
   }
 
-  .review-form-stars {
+  /* Body */
+  .rf-body {
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    background: #f9fafb;
+  }
+
+  /* Left col */
+  .rf-left {
+    padding: 28px 15px;
+    border-right: 1px solid #e5e7eb;
+  }
+
+  .rf-label {
+    display: block;
+    font-size: 13px;
+    font-weight: 500;
+    color: #374151;
+    margin-bottom: 12px;
+  }
+
+  .rf-req {
+    color: #ef4444;
+  }
+
+  .rf-stars {
     display: flex;
-    gap: 6px;
-    margin-bottom: 20px;
-    cursor: pointer;
+    gap: 4px;
+    margin-bottom: 10px;
   }
 
-  .star {
-    font-size: 28px;
+  .rf-star {
+    font-size: 30px;
     color: #d1d5db;
-    transition: color 0.15s;
     cursor: pointer;
+    transition: color 0.15s, transform 0.1s;
+    line-height: 1;
   }
 
-  .star.active {
-    color: #f59e0b;
+  .rf-star.active,
+  .rf-star:hover {
+    color: #f59e0b !important;
   }
 
-  .review-form-field {
+  .rf-star:hover {
+    transform: scale(1.1);
+  }
+
+  .rf-hint {
+    font-size: 12px;
+    color: #9ca3af;
+    margin: 0;
+  }
+
+  /* Right col */
+  .rf-right {
+    padding: 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    background: #f9fafb;
+  }
+
+  .rf-field {
     display: flex;
     flex-direction: column;
     gap: 6px;
-    margin-bottom: 16px;
   }
 
-  .review-form-field label {
-    font-size: 13px;
-    font-weight: 600;
-    color: #374151;
-  }
-
-  .review-form-field input,
-  .review-form-field textarea {
+  .rf-textarea,
+  .rf-input {
+    width: 100%;
     padding: 10px 14px;
-    border: 1px solid #e5e7eb;
-    border-radius: 10px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
     font-size: 14px;
     font-family: inherit;
     color: #111;
+    background: #fff;
     outline: none;
-    transition: border-color 0.15s;
-    resize: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    box-sizing: border-box;
   }
 
-  .review-form-field input:focus,
-  .review-form-field textarea:focus {
+  .rf-textarea {
+    resize: vertical;
+    min-height: 110px;
+  }
+
+  .rf-textarea:focus,
+  .rf-input:focus {
     border-color: #6366f1;
+    box-shadow: 0 0 0 3px rgba(99,102,241,0.08);
   }
 
-  .review-form-btn {
-    width: 100%;
-    padding: 12px;
+  .rf-char-count {
+    font-size: 11px;
+    color: #9ca3af;
+    text-align: right;
+  }
+
+  /* Footer */
+  .rf-footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    
+    margin-top: 4px;
+  }
+
+  .rf-message {
+    font-size: 13px;
+    margin: 0;
+    flex: 1;
+  }
+
+  .rf-message.success { color: #10b981; }
+  .rf-message.error   { color: #ef4444; }
+
+  .rf-btn {
+    padding: 11px 28px;
     background: #111;
     color: #fff;
     border: none;
-    border-radius: 10px;
+    border-radius: 8px;
     font-size: 14px;
     font-weight: 600;
     cursor: pointer;
     font-family: inherit;
     transition: background 0.15s;
+    white-space: nowrap;
   }
 
-  .review-form-btn:hover {
-    background: #374151;
-  }
+  .rf-btn:hover    { background: #374151; }
+  .rf-btn:disabled { background: #9ca3af; cursor: not-allowed; }
 
-  .review-form-btn:disabled {
-    background: #9ca3af;
-    cursor: not-allowed;
-  }
-
-  .review-form-message {
-    margin-top: 12px;
-    font-size: 13px;
-    text-align: center;
-  }
-
-  .review-form-message.success {
-    color: #10b981;
-  }
-
-  .review-form-message.error {
-    color: #ef4444;
+  /* Responsive */
+  @media (max-width: 640px) {
+    .rf-body {
+      grid-template-columns: 1fr;
+    }
+    .rf-left {
+      border-right: none;
+      border-bottom: 1px solid #e5e7eb;
+    }
   }
 </style>
 
