@@ -55,7 +55,7 @@ const handlePostRequest = async () => {
   const text = textEl.value.trim();
   const rating = parseInt(document.getElementById("ratingValue").value, 10);
   const productId = window.__productId;
-  const appUrl = window.__appUrl;
+  // const appUrl = window.__appUrl;
 
   // ─── Validation ───────────────────────────────────────────────────────────
   if (!author) {
@@ -92,11 +92,10 @@ const handlePostRequest = async () => {
   console.log("Sending data:", payload);
 
   try {
-    const response = await fetch(`${appUrl}/api/reviews`, {
+    const response = await fetch(`/apps/product-reviews?productId=${productId}&shop=${window.__shop}`, {
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
-        "ngrok-skip-browser-warning": "true",
+        "Content-Type": "application/json"
       },
       body: JSON.stringify(payload),
     });

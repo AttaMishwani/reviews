@@ -3,6 +3,7 @@
   <!-- Header -->
   <div class="rf-header">
     <h3 class="rf-header-title">Leave a Review</h3>
+    <h3>{{product.id}}</h3>
   </div>
 
   <!-- Body: two columns -->
@@ -49,7 +50,7 @@
 
 <script>
   window.__productId = "{{ product.id }}";
-  window.__appUrl = "{{ shop.metafields.app.url }}" || "https://e791-202-47-41-0.ngrok-free.app";
+  // window.__appUrl = "{{ shop.metafields.app.url }}";
   window.__shop = "{{ shop.permanent_domain }}";
 </script>
 

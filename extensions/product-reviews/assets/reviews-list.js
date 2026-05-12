@@ -12,19 +12,24 @@ document.addEventListener("DOMContentLoaded", () => {
 
 async function loadReviews() {
   const productId = window.__productId;
-  const appUrl = window.__appUrl;
-  const shop = window.__shop;
-
+ const shop = window.__shop
+const payload = {
+  productId:productId,
+  shop : shop,
+  intent : "GetReviews"
+}
   try {
     const response = await fetch(
-      `${appUrl}/api/reviews?productId=${productId}&shop=${shop}`,
-      {
-        headers: {
-          "ngrok-skip-browser-warning": "true",
+      `/apps/product-reviews` , {
+        method:"POST",
+        headers:{
+          "Content-type":"application/json"
         },
-      }
+        body : JSON.stringify(payload)
+      },
+   
     );
-
+  
     if (response.ok) {
       const data = await response.json();
       allReviews = data.reviews || [];
@@ -32,8 +37,9 @@ async function loadReviews() {
     }
   } catch (error) {
     console.error("Could not load reviews:", error);
-  }
-}
+  } }
+
+
 
 function renderReviews(reviews, showAll) {
   const container = document.getElementById("reviewsList");
