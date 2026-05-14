@@ -56,28 +56,3 @@ name = "Description"
 type = "multi_line_text_field"
 
 
-[metaobjects.app.product_review]
-name = "Product Review"
-access.admin = "merchant_read_write"
-access.storefront = "public_read"
-
-
-[metaobjects.app.product_review.fields.product_id]
-name = "Product Id"
-type = "single_line_text_field"
-
-[metaobjects.app.product_review.fields.author]
-name = "Author"
-type = "single_line_text_field"
-
-[metaobjects.app.product_review.fields.review_text]
-name= "review Text"
-type = "multi_line_text_field"
-
-[metaobjects.app.product_review.fields.rating]
-name = "Rating"
-type = "number_integer"
-
-[metaobjects.app.product_review.fields.date]
-name = "Date"
-type= "single_line_text_field"

@@ -1,51 +1,74 @@
-const INITIAL_COUNT = 3;
+const PAGE_SIZE = 5;
+
 let allReviews = [];
+let endCursor = null;
+let hasNextPage = true;
+let loading = false;
 
 document.addEventListener("DOMContentLoaded", () => {
-  loadReviews();
+  console.log("Product ID being used:", window.__productId);
+  loadReviews(true);
 
   document.getElementById("seeMoreBtn")?.addEventListener("click", () => {
-    renderReviews(allReviews, true);
-    document.getElementById("seeMoreWrapper").style.display = "none";
+    loadMoreReviews();
   });
 });
 
-async function loadReviews() {
+async function loadReviews(reset = false) {
   const productId = window.__productId;
- const shop = window.__shop
-const payload = {
-  productId:productId,
-  shop : shop,
-  intent : "GetReviews"
-}
+
+  if (reset) {
+    allReviews = [];
+    endCursor = null;
+    hasNextPage = true;
+  }
+
+  const payload = {
+    productId,
+    intent: "GetReviews",
+    after: endCursor,
+  };
+
   try {
-    const response = await fetch(
-      `/apps/product-reviews` , {
-        method:"POST",
-        headers:{
-          "Content-type":"application/json"
-        },
-        body : JSON.stringify(payload)
+    const response = await fetch(`/apps/product-reviews`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
       },
-   
-    );
-  
-    if (response.ok) {
-      const data = await response.json();
-      allReviews = data.reviews || [];
-      renderReviews(allReviews, false);
-    }
+      body: JSON.stringify(payload),
+    });
+
+    const data = await response.json();
+
+    const newReviews = data?.reviews || [];
+
+    // append new batch
+    allReviews = [...newReviews, ...allReviews ];
+
+    // update pagination info
+    endCursor = data?.pageInfo?.endCursor;
+    hasNextPage = data?.pageInfo?.hasNextPage;
+
+    renderReviews(allReviews);
+    updateButton();
   } catch (error) {
     console.error("Could not load reviews:", error);
-  } }
+  }
+}
+
+async function loadMoreReviews() {
+  if (!hasNextPage || loading) return;
+
+  loading = true;
+  await loadReviews(false);
+  loading = false;
+}
 
 
-
-function renderReviews(reviews, showAll) {
+function renderReviews(reviews) {
   const container = document.getElementById("reviewsList");
   const noReviews = document.getElementById("noReviews");
   const countEl = document.getElementById("reviewCount");
-  const seeMoreWrapper = document.getElementById("seeMoreWrapper");
 
   if (!reviews || reviews.length === 0) {
     if (noReviews) noReviews.style.display = "block";
@@ -54,16 +77,16 @@ function renderReviews(reviews, showAll) {
   }
 
   if (noReviews) noReviews.style.display = "none";
-  if (countEl) countEl.textContent = `${reviews.length} review${reviews.length !== 1 ? "s" : ""}`;
+  if (countEl) {
+    countEl.textContent = `${reviews.length} review${reviews.length !== 1 ? "s" : ""}`;
+  }
 
-  // remove existing cards
   container.querySelectorAll(".rl-card").forEach((el) => el.remove());
 
-  const visibleReviews = showAll ? reviews : reviews.slice(0, INITIAL_COUNT);
-
-  visibleReviews.forEach((review) => {
+  reviews.forEach((review) => {
     const card = document.createElement("div");
     card.className = "rl-card";
+
     card.innerHTML = `
       <div class="rl-card-top">
         <div class="rl-card-left">
@@ -72,19 +95,32 @@ function renderReviews(reviews, showAll) {
         </div>
         <span class="rl-date">${review.date}</span>
       </div>
+
       <div class="rl-stars">
-        ${"★".repeat(review.rating)}<span>${"★".repeat(5 - review.rating)}</span>
+        ${"★".repeat(review.rating)}
+        <span>${"★".repeat(5 - review.rating)}</span>
       </div>
+
       <p class="rl-text">${review.text}</p>
     `;
+
     container.appendChild(card);
   });
-
-  // show see more button if there are more than INITIAL_COUNT reviews
-  if (!showAll && reviews.length > INITIAL_COUNT) {
-    seeMoreWrapper.style.display = "block";
-    document.getElementById("seeMoreBtn").textContent = `See All ${reviews.length} Reviews`;
-  } else {
-    seeMoreWrapper.style.display = "none";
-  }
 }
+
+function updateButton() {
+  const wrapper = document.getElementById("seeMoreWrapper");
+  const btn = document.getElementById("seeMoreBtn");
+
+  if (!hasNextPage) {
+    wrapper.style.display = "none";
+    return;
+  }
+
+  wrapper.style.display = "block";
+  btn.textContent = "Load More Reviews";
+}
+
+window.refreshReviews = () => {
+  loadReviews(true);
+};

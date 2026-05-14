@@ -2,26 +2,30 @@
 <div class="rl-section">
   <div class="rl-header">
     <h3 class="rl-title">Customer Reviews</h3>
-    <h3>{{ shop.domain }}</h3>
-    <h3>{{ shop.permanent_domain }}</h3>
     <span class="rl-count" id="reviewCount"></span>
   </div>
 
   <div id="reviewsList">
-    <p class="rl-empty" id="noReviews">No reviews yet. Be the first to review this product!</p>
+    <p class="rl-empty" id="noReviews">
+      No reviews yet. Be the first to review this product!
+    </p>
   </div>
 
+  <!-- Load More Button -->
   <div id="seeMoreWrapper" style="display:none; text-align:center; margin-top:16px;">
-    <button id="seeMoreBtn" class="rl-see-more-btn">See All Reviews</button>
+    <button id="seeMoreBtn" class="rl-see-more-btn">
+      Load More Reviews
+    </button>
   </div>
 </div>
 
+<!-- Product Data for JS -->
 <script>
   window.__productId = "{{ product.id }}";
   window.__appUrl = "https://217f-202-47-41-0.ngrok-free.app";
-  window.__shop = "{{ shop.permanent_domain }}";
 </script>
 
+<!-- Reviews Script -->
 <script src="{{ 'reviews-list.js' | asset_url }}" defer></script>
 
 <style>
@@ -65,10 +69,7 @@
   }
 
   .rl-card {
-    /* background: #fff; */
-   padding: 20px ;
- 
-   
+    padding: 20px;
     width: 100%;
     box-sizing: border-box;
   }
@@ -77,7 +78,6 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    /* margin-bottom: 8px; */
   }
 
   .rl-card-left {
@@ -115,7 +115,6 @@
     font-size: 15px;
     color: #f59e0b;
     letter-spacing: 2px;
-    /* margin-bottom: 10px; */
     margin-left: 46px;
   }
 
